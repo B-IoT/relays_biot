@@ -77,13 +77,7 @@ class relay:
     
     async def loop(self):
         while True:
-            print("begin process")
-            self.scanner.scan(timeout=2)
-            time_sec = int(time.time())
-            print(time_sec)
-            while time_sec % 3 != 0 :
-                time.sleep(0.01)
-                time_sec = int(time.time())
+            self.scanner.scan(timeout=1)
             self._write_measures()
 
     
