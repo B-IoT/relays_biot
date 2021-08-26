@@ -112,6 +112,7 @@ class relay:
 
 
 async def main():
+    time.sleep(40) # Needed to let the OS start the bluetooth service before beginning to scan. cf clickup doc
     relay_instance = relay()
     await relay_instance.loop()
 
