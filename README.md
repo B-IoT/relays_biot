@@ -1,4 +1,4 @@
-# Relays_biot
+# relays_biot
 
 This repository MUST NOT BE RENAMED!!! 
 
