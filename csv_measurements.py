@@ -8,7 +8,8 @@ import sys
 
 from time import ctime
 
-CSV_FILE_NAME_PREFIX = "measurements"
+
+CSV_FILE_NAME_PREFIX = "measurements/measurements"
 CSV_FILE_NAME_EXTENSION = ".csv"
 
 
