@@ -78,6 +78,7 @@ class relay:
     async def loop(self):
         while True:
             self.scanner.scan(timeout=1)
+            print("Write measures")
             self._write_measures()
 
     
