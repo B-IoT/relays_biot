@@ -68,7 +68,7 @@ class relay:
             beaconDoc.pop("txPower")
             beaconDoc.pop("timeSinceLastClick")
 
-        f.write("address;" + beaconDoc["mac"] + "\nrssi;" + str(beaconDoc["rssi"]) + "\n")
+            f.write("address;" + beaconDoc["mac"] + "\nrssi;" + str(beaconDoc["rssi"]) + "\n")
 
         
         self.beacons = {}
