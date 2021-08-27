@@ -10,9 +10,11 @@ from time import ctime
 
 CSV_FILE_NAME = "measurements.csv"
 
+# This class represent the main program of a relay
+# It connects to the backend via MQTT and 
 class Relay:
 
-    TOPIC_PARAMETERS = "update.parameters"
+    TOPIC_MANAGEMENT = "relay.management"
     TOPIC_UPDATE = "incoming.update"
     MQTT_URL = "mqtt.b-iot.ch"
     MQTT_PORT = 443
@@ -84,6 +86,12 @@ class Relay:
         self.beacons = {}
         if f != None:
             f.close()
+    
+    def _handle_management_msg(self, msgJson):
+        if msgJson["reboot"] == True:
+            # TODO reboot the Raspberry
+        
+        self._update_parameters_from_backend(msgJson)
 
 
     def _update_parameters_from_backend(self, msgJson):
@@ -94,6 +102,8 @@ class Relay:
 
         self.latitude = msgJson["latitude"]
         self.longitude = msgJson["longitude"]
+
+        wifiSsid = msgJson[""]
         
 
     # The callback for when the client receives a CONNACK response from the server.
@@ -102,16 +112,17 @@ class Relay:
 
         # Subscribing in on_connect() means that if we lose the connection and
         # reconnect then subscriptions will be renewed.
-        client.subscribe(self.TOPIC_PARAMETERS, 1)
+        client.subscribe(self.TOPIC_MANAGEMENT, 1)
 
     def on_disconnect(self, client, userdata, rc):
         client.reconnect()
+
     # The callback for when a PUBLISH message is received from the server.
     def on_message_mqtt(self, client, userdata, msg):
         print("topic= " + msg.topic+", message = "+str(msg.payload))
-        if(msg.topic == self.TOPIC_PARAMETERS):
+        if(msg.topic == self.TOPIC_MANAGEMENT):
             msgJson = json.loads(msg.payload.decode("utf-8"))
-            self._update_parameters_from_backend(msgJson)
+            self._handle_management_msg(msgJson)
     
     def connect_mqtt(self):
         # Connect the client to mqtt:
