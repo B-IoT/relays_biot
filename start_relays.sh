@@ -1,3 +1,3 @@
+cd $(dirname $0)
 
-sudo reboot
-# sudo python3 csv_measurements.py &> logs/csv_measurements_logs.txt
+sudo python3 main_relay.py &> logs/main_relay.txt
