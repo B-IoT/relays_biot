@@ -3,5 +3,5 @@
 
 cd $(dirname $0)
 
-git pull
+sudo -u pi git pull
 sh start_relays.sh
