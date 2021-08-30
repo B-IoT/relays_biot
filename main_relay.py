@@ -90,6 +90,7 @@ class Relay:
     def _handle_management_msg(self, msgJson):
         if msgJson["reboot"] == True:
             # TODO reboot the Raspberry
+            a = 3
         
         self._update_parameters_from_backend(msgJson)
 
