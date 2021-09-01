@@ -111,7 +111,7 @@ class Relay:
             self._update_wifi_credentials(wifi_ssid, wifi_password, reset)
     
     def _update_wifi_credentials(self, ssid, password, reset):
-        print("Updating wifi credentials...")
+        print("Checking update of wifi credentials...")
         if reset:
             print("Resetting wpa_supplicant.conf...")
             os.system(f"echo \"{self.WPA_SUPPLICANT_DEFAULT}\" | sudo tee {self.WPA_SUPPLICANT_CONF_PATH}")
