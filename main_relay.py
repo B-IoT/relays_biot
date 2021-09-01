@@ -33,6 +33,7 @@ class Relay:
             os.system("sudo reboot")
 
         config = json.load(f)
+        f.close()
 
         self.relayID = config["relayID"]
         self.mqttID = config["mqttID"]
