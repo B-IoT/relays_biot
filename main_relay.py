@@ -19,6 +19,7 @@ class Relay:
     TOPIC_UPDATE = "incoming.update"
     MQTT_URL = "mqtt.b-iot.ch"
     MQTT_PORT = 443
+    SCAN_TIMEOUT = 2
 
 
     def __init__(self):
@@ -60,12 +61,9 @@ class Relay:
             res.append(macAddr.lower())
         return res
 
-    def _send_beacons_on_mqtt(self, csv):
+    def _send_beacons_on_mqtt(self):
         # Example message:
         #{"relayID":"relay_P1","beacons":[{"mac":"fc:02:a0:fa:33:19","rssi":-82,"battery":42,"temperature":24,"status":3}],"latitude":46.51746,"longitude":6.562729,"floor":0} from client relay_P1
-        f = None
-        if csv:
-            f = open(CSV_FILE_NAME, mode='a')
         for addr, b in self.beacons.items():
             beaconDoc = b.copy()
             beaconDoc.pop("timeSinceLastMove")
@@ -79,14 +77,9 @@ class Relay:
             doc["longitude"] = self.longitude
             doc["floor"] = self.floor
 
-            if csv:
-                f.write("address;" + beaconDoc["mac"] + "\nrssi;" + str(beaconDoc["rssi"]) + "\n")
-
             self.mqttClient.publish(self.TOPIC_UPDATE, payload = json.dumps(doc))
         
         self.beacons = {}
-        if f != None:
-            f.close()
     
     def _handle_management_msg(self, msgJson):
         if "reboot" in msgJson and msgJson["reboot"] == True:
@@ -150,16 +143,16 @@ class Relay:
         self.mqttClient.loop_start()
 
     
-    async def loop(self, csv = False):
+    async def loop(self):
         while True:
-            print("begin process")
-            self.scanner.scan(timeout=2)
+            print("begin Scan")
+            self.scanner.scan(timeout=SCAN_TIMEOUT)
             time_sec = int(time.time())
             print(time_sec)
             while time_sec % 3 != 0 :
                 time.sleep(0.01)
                 time_sec = int(time.time())
-            self._send_beacons_on_mqtt(csv)
+            self._send_beacons_on_mqtt()
 
     
     class ScanDelegate(DefaultDelegate):
@@ -189,10 +182,6 @@ class Relay:
             # elif isNewData:
             #     print("Received new data from", dev.addr)
 
-            
-    
-    
-
 
     # Launch BLE loop
     # event_loop = asyncio.get_event_loop()
@@ -200,21 +189,13 @@ class Relay:
     # event_loop.close()
 
 
-async def main(csv = False):
+async def main():
     relay_instance = Relay()
     relay_instance.connect_mqtt()
-    await relay_instance.loop(csv)
+    await relay_instance.loop()
 
 
 if __name__ == "__main__":
-    if len(sys.argv) > 1 and sys.argv[1] == "--csv":
-        # csv mode the get measurements 
-        f = open(CSV_FILE_NAME, mode='w')
-        f.close()
-        loop = asyncio.get_event_loop()
-        loop.run_until_complete(main(True))
-        loop.close()
-    else:
-        loop = asyncio.get_event_loop()
-        loop.run_until_complete(main())
-        loop.close()
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(main())
+    loop.close()
