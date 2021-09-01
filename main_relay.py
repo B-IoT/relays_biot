@@ -9,7 +9,6 @@ import os
 
 from time import ctime
 
-CSV_FILE_NAME = "measurements.csv"
 
 # This class represent the main program of a relay
 # It connects to the backend via MQTT and 
@@ -20,6 +19,18 @@ class Relay:
     MQTT_URL = "mqtt.b-iot.ch"
     MQTT_PORT = 443
     SCAN_TIMEOUT = 2
+    WPA_SUPPLICANT_DEFAULT = """
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+country=CH
+
+network={
+        ssid="Test"
+        psk="12345678"
+}
+    """
+    WPA_SUPPLICANT_CONF_PATH = "/etc/wpa_supplicant/wpa_supplicant.conf"
+
 
 
     def __init__(self):
@@ -103,9 +114,20 @@ class Relay:
         self.longitude = msgJson["longitude"]
 
         if "wifi" in msgJson:
-            wifiSsid = msgJson["wifi"]["ssid"]
-            wifiPassword = msgJson["wifi"]["password"]
-            # TODO change it
+            wifi_ssid = msgJson["wifi"]["ssid"]
+            wifi_password = msgJson["wifi"]["password"]
+            reset = msgJson["wifi"]["reset"]
+            self._update_wifi_credentials(wifi_ssid, wifi_password, reset)
+    
+    def _update_wifi_credentials(self, ssid, password, reset):
+        if reset:
+            os.system(f"echo {self.WPA_SUPPLICANT_DEFAULT} | sudo tee {self.WPA_SUPPLICANT_CONF_PATH}")
+        to_add = f"""
+\nnetwork={{
+    ssid="{ssid}"
+    psk="{password}"
+}}
+        """
         
 
     # The callback for when the client receives a CONNACK response from the server.
