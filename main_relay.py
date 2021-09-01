@@ -128,7 +128,7 @@ network={
     psk="{password}"
 }}
         """
-        
+        os.system(f"echo {to_add} | sudo tee -a {self.WPA_SUPPLICANT_CONF_PATH}")
 
     # The callback for when the client receives a CONNACK response from the server.
     def on_connect_mqtt(self, client, userdata, flags, rc):
