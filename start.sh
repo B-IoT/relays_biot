@@ -11,5 +11,12 @@ done
 
 git checkout -- .
 git pull
-chmod +x start_relays.sh
-sh start_relays.sh
+
+FILE=/home/pi/biot/config/.conf
+if test -f "$FILE"; then
+    echo "$FILE exists."
+    chmod +x start_relays.sh
+    sh start_relays.sh
+else
+    python3 first_time_config.py
+fi

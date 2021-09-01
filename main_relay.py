@@ -113,7 +113,8 @@ class Relay:
         self.whiteList = self._parse_whiteList(whiteListString)
         print(f"whiteList = {self.whiteList}")
 
-        self.company = msgJson["company"]
+        if "company" in msgJson:
+            self.company = msgJson["company"]
 
         self.latitude = msgJson["latitude"]
         self.longitude = msgJson["longitude"]
