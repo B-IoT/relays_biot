@@ -118,8 +118,14 @@ async def main():
 
 
 if __name__ == "__main__":
-    t = time.localtime()
-    CSV_FILE_NAME = CSV_FILE_NAME_PREFIX + "_" + str(t.tm_hour) + "_" + str(t.tm_min) + CSV_FILE_NAME_EXTENSION
+    nextF = open("next_measurement_name.txt", 'r')
+    i = int(nextF.readline().strip())
+    nextF.close()
+    nextF = open("next_measurement_name.txt", 'w')
+    nextF.write(str(i + 1))
+    nextF.close()
+    
+    CSV_FILE_NAME = CSV_FILE_NAME_PREFIX + "_" + str(i) + "_" + CSV_FILE_NAME_EXTENSION
     f = open(CSV_FILE_NAME, mode='w')
     f.close()
     loop = asyncio.get_event_loop()
