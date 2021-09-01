@@ -99,7 +99,10 @@ class Relay:
         self.latitude = msgJson["latitude"]
         self.longitude = msgJson["longitude"]
 
-        wifiSsid = msgJson[""]
+        if "wifi" in msgJson:
+            wifiSsid = msgJson["wifi"]["ssid"]
+            wifiPassword = msgJson["wifi"]["password"]
+            # TODO change it
         
 
     # The callback for when the client receives a CONNACK response from the server.
