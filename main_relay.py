@@ -19,16 +19,7 @@ class Relay:
     MQTT_URL = "mqtt.b-iot.ch"
     MQTT_PORT = 443
     SCAN_TIMEOUT = 2
-    WPA_SUPPLICANT_DEFAULT = """
-ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
-update_config=1
-country=CH
-
-network={
-        ssid=\\\"Test\\\"
-        psk=\\\"12345678\\\"
-}
-    """
+    WPA_SUPPLICANT_DEFAULT = "ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev\nupdate_config=1\ncountry=CH\n\nnetwork={\n\tssid=\\\"Test\\\"\n\tpsk=\\\"12345678\\\"\n}"
     WPA_SUPPLICANT_CONF_PATH = "/etc/wpa_supplicant/wpa_supplicant.conf"
 
 
@@ -122,8 +113,16 @@ network={
     def _update_wifi_credentials(self, ssid, password, reset):
         if reset:
             os.system(f"echo \"{self.WPA_SUPPLICANT_DEFAULT}\" | sudo tee {self.WPA_SUPPLICANT_CONF_PATH}")
-        to_add = f"\nnetwork={{\n\tssid=\\\"{ssid}\\\"\n\tpsk=\\\"{password}\\\"\n}}"
-        os.system(f"echo \"{to_add}\" | sudo tee -a {self.WPA_SUPPLICANT_CONF_PATH}")
+
+        # Check that the ssid is not already in the config
+        present = False
+        wpa_conf = open(self.WPA_SUPPLICANT_CONF_PATH, 'r')
+        for l in wpa_conf:
+            if "ssid" in l and ssid in l:
+                present = True
+        if not present:
+            to_add = f"\nnetwork={{\n\tssid=\\\"{ssid}\\\"\n\tpsk=\\\"{password}\\\"\n}}"
+            os.system(f"echo \"{to_add}\" | sudo tee -a {self.WPA_SUPPLICANT_CONF_PATH}")
 
     # The callback for when the client receives a CONNACK response from the server.
     def on_connect_mqtt(self, client, userdata, flags, rc):
