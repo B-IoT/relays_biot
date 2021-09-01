@@ -89,7 +89,7 @@ class Relay:
             f.close()
     
     def _handle_management_msg(self, msgJson):
-        if msgJson["reboot"] == True:
+        if "reboot" in msgJson and msgJson["reboot"] == True:
             # TODO reboot the Raspberry
             a = 3
         
