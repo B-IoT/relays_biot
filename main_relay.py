@@ -86,6 +86,7 @@ class Relay:
     
     def _handle_management_msg(self, msgJson):
         if "reboot" in msgJson and msgJson["reboot"] == True:
+            print("reboot command received! rebooting...")
             os.system("sudo reboot")
         
         self._update_parameters_from_backend(msgJson)
