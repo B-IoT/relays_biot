@@ -5,6 +5,7 @@ import json
 from paho.mqtt.client import *
 from bluepy.btle import Scanner, DefaultDelegate
 import sys
+import os
 
 from time import ctime
 
@@ -14,8 +15,7 @@ CSV_FILE_NAME = "measurements.csv"
 # It connects to the backend via MQTT and 
 class Relay:
 
-    # TOPIC_MANAGEMENT = "relay.management"
-    TOPIC_MANAGEMENT = "update.parameters"
+    TOPIC_MANAGEMENT = "relay.management"
     TOPIC_UPDATE = "incoming.update"
     MQTT_URL = "mqtt.b-iot.ch"
     MQTT_PORT = 443
@@ -64,6 +64,8 @@ class Relay:
     def _send_beacons_on_mqtt(self):
         # Example message:
         #{"relayID":"relay_P1","beacons":[{"mac":"fc:02:a0:fa:33:19","rssi":-82,"battery":42,"temperature":24,"status":3}],"latitude":46.51746,"longitude":6.562729,"floor":0} from client relay_P1
+
+        print("Sending beacons to backend...")
         for addr, b in self.beacons.items():
             beaconDoc = b.copy()
             beaconDoc.pop("timeSinceLastMove")
@@ -80,11 +82,11 @@ class Relay:
             self.mqttClient.publish(self.TOPIC_UPDATE, payload = json.dumps(doc))
         
         self.beacons = {}
+        print("Beacons sent to backend!")
     
     def _handle_management_msg(self, msgJson):
         if "reboot" in msgJson and msgJson["reboot"] == True:
-            # TODO reboot the Raspberry
-            a = 3
+            os.system("sudo reboot")
         
         self._update_parameters_from_backend(msgJson)
 
@@ -148,7 +150,7 @@ class Relay:
     
     async def loop(self):
         while True:
-            print("begin Scan")
+            print("Begin Scan")
             self.scanner.scan(timeout=self.SCAN_TIMEOUT)
             time_sec = int(time.time())
             print(time_sec)
