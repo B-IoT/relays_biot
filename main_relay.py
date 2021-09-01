@@ -111,7 +111,9 @@ class Relay:
             self._update_wifi_credentials(wifi_ssid, wifi_password, reset)
     
     def _update_wifi_credentials(self, ssid, password, reset):
+        print("Updating wifi credentials...")
         if reset:
+            print("Resetting wpa_supplicant.conf...")
             os.system(f"echo \"{self.WPA_SUPPLICANT_DEFAULT}\" | sudo tee {self.WPA_SUPPLICANT_CONF_PATH}")
 
         # Check that the ssid is not already in the config
@@ -121,8 +123,13 @@ class Relay:
             if "ssid" in l and ssid in l:
                 present = True
         if not present:
+            print("Adding new network to wpa_supplicant.conf...")
             to_add = f"\nnetwork={{\n\tssid=\\\"{ssid}\\\"\n\tpsk=\\\"{password}\\\"\n}}"
             os.system(f"echo \"{to_add}\" | sudo tee -a {self.WPA_SUPPLICANT_CONF_PATH}")
+        
+        if reset or not present:
+            # Changes so reboot
+            os.system("sudo reboot")
 
     # The callback for when the client receives a CONNACK response from the server.
     def on_connect_mqtt(self, client, userdata, flags, rc):
