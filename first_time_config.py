@@ -45,13 +45,13 @@ class FirstTimeConfig:
    
 
     def send_config_request(self):
-        doc = []
+        doc = {}
         doc["configuration"] = "ready"
         self.mqttClient.publish(self.TOPIC_CONFIG, payload = json.dumps(doc))
     
     def _handle_config_response(self, msgJson):
         if "relayID" not in msgJson or "mqttID" not in msgJson or "mqttUsername" not in msgJson or "mqttPassword" not in msgJson:
-            doc = []
+            doc = {}
             doc["message"] = "Error, the given json does not contain one of the following keys: relayID, mqttID, mqttUsername, mqttPassword"
             self.mqttClient.publish(self.TOPIC_CONFIG, payload = json.dumps(doc))
         else:
@@ -59,7 +59,7 @@ class FirstTimeConfig:
                 f = open(self.CONFIG_PATH, 'w')
                 json.dump(msgJson, f)
             except:
-                doc = []
+                doc = {}
                 doc["message"] = "An error occured while writing .config file"
                 self.mqttClient.publish(self.TOPIC_CONFIG, payload = json.dumps(doc))
                 return
@@ -70,14 +70,14 @@ class FirstTimeConfig:
                 f = open(self.CONFIG_PATH, 'r')
                 written_config = json.load(f)
             except:
-                doc = []
+                doc = {}
                 doc["message"] = "An error occured while reading .config file again"
                 self.mqttClient.publish(self.TOPIC_CONFIG, payload = json.dumps(doc))
                 return
             finally:
                 f.close()
             
-            doc = []
+            doc = {}
             doc["message"] = "Written config"
             doc["content"] = json.dumps(written_config)
             doc["path"] = self.CONFIG_PATH
