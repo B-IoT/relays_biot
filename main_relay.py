@@ -168,6 +168,7 @@ class Relay:
         def handleDiscovery(self, dev, isNewDev, isNewData):
             if isNewDev:
                 macAddr = dev.addr
+                print(macAddr, "RSSI:", dev.rssi, dev.getScanData())
                 if macAddr in self.parent.whiteList:
                     print(macAddr, "RSSI:", dev.rssi, dev.getScanData())
                     beacon = {}
