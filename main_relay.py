@@ -21,7 +21,7 @@ class Relay:
     SCAN_TIMEOUT = 2
     WPA_SUPPLICANT_DEFAULT = "ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev\nupdate_config=1\ncountry=CH\n\nnetwork={\n\tssid=\\\"Test\\\"\n\tpsk=\\\"12345678\\\"\n}"
     WPA_SUPPLICANT_CONF_PATH = "/etc/wpa_supplicant/wpa_supplicant.conf"
-    CONF_FILE_PATH = "/home/pi/bit/config/.config"
+    CONF_FILE_PATH = "/home/pi/biot/config/.config"
 
 
 
