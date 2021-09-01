@@ -12,6 +12,8 @@ done
 git checkout -- .
 git pull
 
+chmod +x start.sh
+
 FILE=/home/pi/biot/config/.conf
 if test -f "$FILE"; then
     echo "$FILE exists."

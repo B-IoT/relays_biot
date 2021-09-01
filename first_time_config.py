@@ -2,6 +2,7 @@ import paho.mqtt.client as mqtt
 import json
 from paho.mqtt.client import *
 import os
+import time
 
 class FirstTimeConfig:
 
@@ -34,6 +35,8 @@ class FirstTimeConfig:
             self.mqttUsername = "relayBiot_0"
             self.mqttPassword = "relayBiot_0"
 
+
+        self.configured = False
         
         self.certificate_ca_path = "./isrgrootx1.pem"
 
@@ -78,6 +81,7 @@ class FirstTimeConfig:
             doc["content"] = json.dumps(written_config)
             doc["path"] = self.CONFIG_PATH
             self.mqttClient.publish(self.TOPIC_CONFIG, payload = json.dumps(doc))
+            self.configured = True
 
             
 
@@ -127,3 +131,6 @@ class FirstTimeConfig:
 if __name__ == "__main__":
     first_time_instance = FirstTimeConfig()
     first_time_instance.connect_mqtt()
+    while not first_time_instance.configured:
+        time.sleep(1)
+        print("waiting on configuration...")
