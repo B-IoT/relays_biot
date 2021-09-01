@@ -169,6 +169,7 @@ class Relay:
             if isNewDev:
                 macAddr = dev.addr
                 print(macAddr, "RSSI:", dev.rssi, dev.getScanData())
+                print(self.parent.whiteList)
                 if macAddr in self.parent.whiteList:
                     print(macAddr, "RSSI:", dev.rssi, dev.getScanData())
                     beacon = {}
