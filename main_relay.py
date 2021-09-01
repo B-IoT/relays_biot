@@ -149,7 +149,7 @@ class Relay:
     async def loop(self):
         while True:
             print("begin Scan")
-            self.scanner.scan(timeout=SCAN_TIMEOUT)
+            self.scanner.scan(timeout=self.SCAN_TIMEOUT)
             time_sec = int(time.time())
             print(time_sec)
             while time_sec % 3 != 0 :
