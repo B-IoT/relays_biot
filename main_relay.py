@@ -21,14 +21,25 @@ class Relay:
     SCAN_TIMEOUT = 2
     WPA_SUPPLICANT_DEFAULT = "ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev\nupdate_config=1\ncountry=CH\n\nnetwork={\n\tssid=\\\"Test\\\"\n\tpsk=\\\"12345678\\\"\n}"
     WPA_SUPPLICANT_CONF_PATH = "/etc/wpa_supplicant/wpa_supplicant.conf"
+    CONF_FILE_PATH = "/home/pi/bit/config/.config"
 
 
 
     def __init__(self):
-        self.relayID = "relay_raspberry"
-        self.company = "biot"
-        self.mqttUsername = "testrasp"
-        self.mqttPassword = "testrasp"
+        try:
+            f = open(self.CONF_FILE_PATH, 'r')
+        except:
+            # Cannot open file .config
+            os.system("sudo reboot")
+
+        config = json.load(f)
+
+        self.relayID = config["relayID"]
+        self.mqttID = config["mqttID"]
+        self.mqttUsername = config["mqttUsername"]
+        self.mqttPassword = config["mqttPassword"]
+        
+        self.company = "biot" # Default value
 
         self.latitude = 0.0
         self.longitude = 0.0
@@ -100,6 +111,8 @@ class Relay:
 
         self.whiteList = self._parse_whiteList(whiteListString)
         print(f"whiteList = {self.whiteList}")
+
+        self.company = msgJson["company"]
 
         self.latitude = msgJson["latitude"]
         self.longitude = msgJson["longitude"]
