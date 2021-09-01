@@ -9,6 +9,7 @@ while ! (ping -c 1 -W 1 1.2.3.4 | grep -q 'statistics'); do
     sleep 10
 done
 
+git checkout -- .
 git pull
 chmod +x start_relays.sh
 sh start_relays.sh
