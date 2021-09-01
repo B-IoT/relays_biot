@@ -97,6 +97,7 @@ class Relay:
 
     def _update_parameters_from_backend(self, msgJson):
         whiteListString = msgJson["whiteList"]
+        print(f"whiteListString = {whiteListString}")
 
         self.whiteList = self._parse_whiteList(whiteListString)
         print(f"whiteList = {self.whiteList}")
@@ -168,8 +169,6 @@ class Relay:
         def handleDiscovery(self, dev, isNewDev, isNewData):
             if isNewDev:
                 macAddr = dev.addr
-                print(macAddr, "RSSI:", dev.rssi, dev.getScanData())
-                print(self.parent.whiteList)
                 if macAddr in self.parent.whiteList:
                     print(macAddr, "RSSI:", dev.rssi, dev.getScanData())
                     beacon = {}
