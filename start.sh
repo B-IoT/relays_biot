@@ -10,4 +10,5 @@ while ! (ping -c 1 -W 1 1.2.3.4 | grep -q 'statistics'); do
 done
 
 git pull
+chmod +x start_relays.sh
 sh start_relays.sh
