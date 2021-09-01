@@ -46,6 +46,7 @@ class FirstTimeConfig:
 
     def _send_config_request(self):
         doc = []
+        doc["configuration"] = "ready"
         self.mqttClient.publish(self.TOPIC_CONFIG, payload = json.dumps(doc))
     
     def _handle_config_response(self, msgJson):
