@@ -14,7 +14,8 @@ CSV_FILE_NAME = "measurements.csv"
 # It connects to the backend via MQTT and 
 class Relay:
 
-    TOPIC_MANAGEMENT = "relay.management"
+    # TOPIC_MANAGEMENT = "relay.management"
+    TOPIC_MANAGEMENT = "update.parameters"
     TOPIC_UPDATE = "incoming.update"
     MQTT_URL = "mqtt.b-iot.ch"
     MQTT_PORT = 443
