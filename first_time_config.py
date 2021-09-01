@@ -44,7 +44,7 @@ class FirstTimeConfig:
 
    
 
-    def _send_config_request(self):
+    def send_config_request(self):
         doc = []
         doc["configuration"] = "ready"
         self.mqttClient.publish(self.TOPIC_CONFIG, payload = json.dumps(doc))
@@ -132,6 +132,8 @@ class FirstTimeConfig:
 if __name__ == "__main__":
     first_time_instance = FirstTimeConfig()
     first_time_instance.connect_mqtt()
+    first_time_instance.send_config_request()
     while not first_time_instance.configured:
         time.sleep(1)
         print("waiting on configuration...")
+        first_time_instance.send_config_request()
