@@ -6,11 +6,12 @@ import time
 
 class FirstTimeConfig:
 
-    TOPIC_CONFIG = "relay.first.configuration"
+    TOPIC_CONFIG = "relay.configuration"
     MQTT_URL = "mqtt.b-iot.ch"
     MQTT_PORT = 443
     DEFAULT_CONF_PATH = "/home/pi/biot/relays_biot/default_config/default.config"
     CONFIG_PATH = "/home/pi/biot/config/.config"
+    CERTIFICATE_PATH = "./isrgrootx1.pem"
 
 
     def __init__(self):
@@ -37,8 +38,6 @@ class FirstTimeConfig:
 
 
         self.configured = False
-        
-        self.certificate_ca_path = "./isrgrootx1.pem"
 
         self.mqttClient = None
 
@@ -111,7 +110,7 @@ class FirstTimeConfig:
         self.mqttClient.will_set("will", payload="{\"company\": \"biot\"}", qos=0, retain=False)
         self.mqttClient.username_pw_set(self.mqttUsername, self.mqttPassword)
         # UNCOMMENT TO USE WSS
-        #client.tls_set(ca_certs=certificate_ca_path) 
+        #client.tls_set(ca_certs=self.CERTIFICATE_PATH) 
         self.mqttClient.on_connect = self.on_connect_mqtt
         self.mqttClient.on_message = self.on_message_mqtt
 

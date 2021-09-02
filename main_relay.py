@@ -22,6 +22,7 @@ class Relay:
     WPA_SUPPLICANT_DEFAULT = "ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev\nupdate_config=1\ncountry=CH\n\nnetwork={\n\tssid=\\\"Test\\\"\n\tpsk=\\\"12345678\\\"\n}"
     WPA_SUPPLICANT_CONF_PATH = "/etc/wpa_supplicant/wpa_supplicant.conf"
     CONF_FILE_PATH = "/home/pi/biot/config/.config"
+    CERTIFICATE_PATH = "./isrgrootx1.pem"
 
 
 
@@ -47,7 +48,6 @@ class Relay:
         self.floor = 0
 
         self.MAC_ADDRESS_LENGTH_BYTES = 6
-        self.certificate_ca_path = "./isrgrootx1.pem"
 
         self.mqttClient = None
         self.whiteList = []
@@ -170,7 +170,7 @@ class Relay:
         self.mqttClient.will_set("will", payload="{\"company\": \"" + self.company + "\"}", qos=0, retain=False)
         self.mqttClient.username_pw_set(self.mqttUsername, self.mqttPassword)
         # UNCOMMENT TO USE WSS
-        #client.tls_set(ca_certs=certificate_ca_path) 
+        #client.tls_set(ca_certs=self.CERTIFICATE_PATH) 
         self.mqttClient.on_connect = self.on_connect_mqtt
         self.mqttClient.on_message = self.on_message_mqtt
 
