@@ -63,7 +63,7 @@ class Relay:
         while(flag):
             macAddr = ""
             for i in range(self.MAC_ADDRESS_LENGTH_BYTES):
-                index = len(res) + 2*i 
+                index = len(res)*2*self.MAC_ADDRESS_LENGTH_BYTES + 2*i 
                 if index + 1 >= len(whiteListString):
                     flag = False
                     break
