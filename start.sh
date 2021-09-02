@@ -20,5 +20,5 @@ if test -f "$FILE"; then
     chmod +x start_relays.sh
     sh start_relays.sh
 else
-    python3 first_time_config.py
+    #python3 first_time_config.py
 fi
