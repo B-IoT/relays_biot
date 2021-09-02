@@ -18,7 +18,8 @@ class Relay:
     TOPIC_UPDATE = "incoming.update"
     MQTT_URL = "mqtt.b-iot.ch"
     MQTT_PORT = 443
-    SCAN_TIMEOUT = 2
+    SENDING_INTERVAL_SECONDS = 2
+    SCAN_TIMEOUT = 1.5 # MUST BE SMALLER THAN SENDING_INTERVAL_SECONDS!!
     WPA_SUPPLICANT_DEFAULT = "ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev\nupdate_config=1\ncountry=CH\n\nnetwork={\n\tssid=\\\"Test\\\"\n\tpsk=\\\"12345678\\\"\n}"
     WPA_SUPPLICANT_CONF_PATH = "/etc/wpa_supplicant/wpa_supplicant.conf"
     CONF_FILE_PATH = "/home/pi/biot/config/.config"
@@ -193,7 +194,7 @@ class Relay:
             self.scanner.scan(timeout=self.SCAN_TIMEOUT)
             time_sec = int(time.time())
             print(time_sec)
-            while time_sec % 3 != 0 :
+            while time_sec % self.SENDING_INTERVAL_SECONDS != 0 :
                 time.sleep(0.01)
                 time_sec = int(time.time())
             self._send_beacons_on_mqtt()
