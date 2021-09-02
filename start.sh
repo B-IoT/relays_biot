@@ -14,7 +14,7 @@ git pull
 
 chmod +x start.sh
 
-FILE=/home/pi/biot/config/.conf
+FILE=/home/pi/biot/config/.config
 if test -f "$FILE"; then
     echo "$FILE exists."
     chmod +x start_relays.sh
