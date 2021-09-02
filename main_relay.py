@@ -166,7 +166,7 @@ class Relay:
     
     def connect_mqtt(self):
         # Connect the client to mqtt:
-        self.mqttClient = mqtt.Client(client_id=self.relayID, clean_session=True, userdata=None, protocol=MQTTv311, transport="websockets")
+        self.mqttClient = mqtt.Client(client_id=self.mqttID, clean_session=True, userdata=None, protocol=MQTTv311, transport="websockets")
         self.mqttClient.will_set("will", payload="{\"company\": \"" + self.company + "\"}", qos=0, retain=False)
         self.mqttClient.username_pw_set(self.mqttUsername, self.mqttPassword)
         # UNCOMMENT TO USE WSS
