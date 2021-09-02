@@ -197,6 +197,7 @@ class Relay:
             while time_sec % self.SENDING_INTERVAL_SECONDS != 0 :
                 time.sleep(0.01)
                 time_sec = int(time.time())
+            print("time = " + str(time_sec) + " number beacons = " + str(len(self.beacons)))
             self._send_beacons_on_mqtt()
 
     
