@@ -47,13 +47,13 @@ class FirstTimeConfig:
     def send_config_request(self):
         doc = {}
         doc["configuration"] = "ready"
-        self.mqttClient.publish(self.TOPIC_CONFIG, payload = json.dumps(doc))
+        self.mqttClient.publish(self.TOPIC_CONFIG, payload = json.dumps(doc), qos=1)
     
     def _handle_config_response(self, msgJson):
         if "relayID" not in msgJson or "mqttID" not in msgJson or "mqttUsername" not in msgJson or "mqttPassword" not in msgJson:
             doc = {}
             doc["message"] = "Error, the given json does not contain one of the following keys: relayID, mqttID, mqttUsername, mqttPassword"
-            self.mqttClient.publish(self.TOPIC_CONFIG, payload = json.dumps(doc))
+            self.mqttClient.publish(self.TOPIC_CONFIG, payload = json.dumps(doc), qos=1)
         else:
             try:
                 f = open(self.CONFIG_PATH, 'w')
@@ -61,7 +61,7 @@ class FirstTimeConfig:
             except:
                 doc = {}
                 doc["message"] = "An error occured while writing .config file"
-                self.mqttClient.publish(self.TOPIC_CONFIG, payload = json.dumps(doc))
+                self.mqttClient.publish(self.TOPIC_CONFIG, payload = json.dumps(doc), qos=1)
                 return
             finally:
                 f.close()
@@ -72,7 +72,7 @@ class FirstTimeConfig:
             except:
                 doc = {}
                 doc["message"] = "An error occured while reading .config file again"
-                self.mqttClient.publish(self.TOPIC_CONFIG, payload = json.dumps(doc))
+                self.mqttClient.publish(self.TOPIC_CONFIG, payload = json.dumps(doc), qos=1)
                 return
             finally:
                 f.close()
@@ -81,7 +81,7 @@ class FirstTimeConfig:
             doc["message"] = "Written config"
             doc["content"] = json.dumps(written_config)
             doc["path"] = self.CONFIG_PATH
-            self.mqttClient.publish(self.TOPIC_CONFIG, payload = json.dumps(doc))
+            self.mqttClient.publish(self.TOPIC_CONFIG, payload = json.dumps(doc), qos=1)
             self.configured = True
 
             

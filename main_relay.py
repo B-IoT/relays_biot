@@ -93,7 +93,7 @@ class Relay:
             doc["longitude"] = self.longitude
             doc["floor"] = self.floor
 
-            self.mqttClient.publish(self.TOPIC_UPDATE, payload = json.dumps(doc))
+            self.mqttClient.publish(self.TOPIC_UPDATE, payload = json.dumps(doc), qos=1)
         
         self.beacons = {}
         print("Beacons sent to backend!")
