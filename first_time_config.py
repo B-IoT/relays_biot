@@ -134,7 +134,7 @@ if __name__ == "__main__":
     first_time_instance.connect_mqtt()
     first_time_instance.send_config_request()
     while not first_time_instance.configured:
-        time.sleep(1)
+        time.sleep(10)
         print("waiting on configuration...")
         first_time_instance.send_config_request()
     os.system("sudo reboot")
