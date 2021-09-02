@@ -137,3 +137,4 @@ if __name__ == "__main__":
         time.sleep(1)
         print("waiting on configuration...")
         first_time_instance.send_config_request()
+    os.system("sudo reboot")
