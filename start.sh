@@ -17,6 +17,7 @@ chmod +x start.sh
 FILE=/home/pi/biot/config/.config
 if test -f "$FILE"; then
     echo "$FILE exists."
+    cat $FILE
     chmod +x start_relays.sh
     sh start_relays.sh
 else
