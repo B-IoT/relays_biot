@@ -33,8 +33,8 @@ class FirstTimeConfig:
         else:
             self.relayID = "relay_0"
             self.mqttID = "relay_0"
-            self.mqttUsername = "relayBiot_0"
-            self.mqttPassword = "f7f9f62cfcfe0bb8aa9af7472c0e5a12dd0cede6b050397ae2b216ad11a271b8"
+            self.mqttUsername = "relayBiot_relay_0"
+            self.mqttPassword = "32f0e036f725f1bb1ea1720d1abe5d134c919bfd163daea4e1cc689779730e97"
 
 
         self.configured = False
