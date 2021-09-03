@@ -7,7 +7,7 @@ import time
 class FirstTimeConfig:
 
     TOPIC_CONFIG = "relay.configuration"
-    MQTT_URL = "mqtt.b-iot.ch"
+    MQTT_URL = "mqtt.b-iot.chf"
     MQTT_PORT = 443
     DEFAULT_CONF_PATH = "/home/pi/biot/relays_biot/default_config/default.config"
     CONFIG_PATH = "/home/pi/biot/config/.config"
