@@ -230,11 +230,11 @@ class Relay:
                             payload = t[2]
                             break
                     if payload != -1:
-                        if payload.startWith("6afe030902"):
+                        if payload.startsWith("6afe030902"):
                             print("OLLLLLLLEEEEEEEEE")
-                        elif payload.startWith("6afe02"):
+                        elif payload.startsWith("6afe02"):
                             print("SHIT")
-                        elif payload.startWith("6afe03030d"):
+                        elif payload.startsWith("6afe03030d"):
                             print("GOUPS")
 
                         
