@@ -215,8 +215,12 @@ class Relay:
                     beacon["mac"] = macAddr
                     beacon["rssi"] = dev.rssi
                     
-                    payload = []
-                    # extract from dev.getScanData()
+                    # extract from dev.getScanData() from the tuple service data
+                    for t in dev.getScanData():
+                        if "Service Data" in t[1]:
+                            payload = t[2]
+                            print(type(payload))
+
                     beacon["temperature"] = 22 # TODO
                     beacon["battery"] = 42 # TODO
                     beacon["timeSinceLastMove"] = 42 # TODO
