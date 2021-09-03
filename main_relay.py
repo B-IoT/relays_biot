@@ -215,18 +215,29 @@ class Relay:
                     beacon["mac"] = macAddr
                     beacon["rssi"] = dev.rssi
                     
+                    # default values sentinel
+                    beacon["temperature"] = -256
+                    beacon["battery"] = -1
+                    beacon["timeSinceLastMove"] = -1
+                    beacon["txPower"] = -1
+                    beacon["timeSinceLastClick"] = -1
+                    beacon["status"] = -1
+
                     # extract from dev.getScanData() from the tuple service data
+                    payload = -1
                     for t in dev.getScanData():
                         if "Service Data" in t[1]:
                             payload = t[2]
-                            print(type(payload))
+                            break
+                    if payload != -1:
+                        if payload.startWith("6afe030902"):
+                            print("OLLLLLLLEEEEEEEEE")
+                        elif payload.startWith("6afe02"):
+                            print("SHIT")
+                        elif payload.startWith("6afe03030d"):
+                            print("GOUPS")
 
-                    beacon["temperature"] = 22 # TODO
-                    beacon["battery"] = 42 # TODO
-                    beacon["timeSinceLastMove"] = 42 # TODO
-                    beacon["txPower"] = 42 # TODO 
-                    beacon["timeSinceLastClick"] = 42 # TODO
-                    beacon["status"] = 0 # TODO
+                        
 
                     self.parent.beacons[beacon["mac"]] = beacon
             # elif isNewData:
