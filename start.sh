@@ -21,5 +21,6 @@ if test -f "$FILE"; then
     chmod +x start_relays.sh
     sh start_relays.sh
 else
+    sudo raspi-config nonint do_expand_rootfs # Expand the filesystem to fill the SD card
     python3 first_time_config.py
 fi
