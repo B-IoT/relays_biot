@@ -236,7 +236,7 @@ class Relay:
                                 # buffer["battery"] = int(payload[24*2:24*2+2], 16)
                                 # buffer["temperature"] = int(payload[28*2:28*2+2], 16)
                                 # buffer["timeSinceLastMove"] = int(payload[16*2:16*2+2], 16)
-                                print(payload)
+                                print(len(payload))
 
                         # if payload.startswith("6afe030902"):
                         #     if len(payload) >= 24*2+1:
