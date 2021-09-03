@@ -231,15 +231,15 @@ class Relay:
                             break
                     if payload != -1:
                         if payload.startswith("6afe"):
-                            if payload[4:6] == "03":
+                            if len(payload) >= 9 and payload[4:10] == "030902":
                                 # telemetry packet
-                                # beacon["battery"] = int(payload[19*2:19*2+2], 16)
+                                beacon["battery"] = int(payload[19*2:19*2+2], 16)
                                 print(f"temperature HEX = {payload[46:48]}")
                                 beacon["temperature"] = int(payload[46:48], 16)
-                                # beacon["timeSinceLastMove"] = int(payload[11*2:11*2+2], 16)
+                                beacon["timeSinceLastMove"] = int(payload[11*2:11*2+2], 16)
 
-                                # bat = beacon["battery"]
-                                # print(f"battery = {bat}")
+                                bat = beacon["battery"]
+                                print(f"battery = {bat}")
                                 temp = beacon["temperature"]
                                 print(f"battery = {temp}")
 
