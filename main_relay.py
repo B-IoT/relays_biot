@@ -171,7 +171,7 @@ class Relay:
         self.mqttClient.will_set("will", payload="{\"company\": \"" + self.company + "\"}", qos=0, retain=False)
         self.mqttClient.username_pw_set(self.mqttUsername, self.mqttPassword)
         # UNCOMMENT TO USE WSS
-        #client.tls_set(ca_certs=self.CERTIFICATE_PATH) 
+        self.mqttClient.tls_set(ca_certs=self.CERTIFICATE_PATH) 
         self.mqttClient.on_connect = self.on_connect_mqtt
         self.mqttClient.on_message = self.on_message_mqtt
 
