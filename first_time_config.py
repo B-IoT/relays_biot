@@ -50,7 +50,7 @@ class FirstTimeConfig:
     
     def _handle_config_response(self, msgJson):
         # Check that it is not one of our own message that is coming back
-        if "relayMessage" not in msgJson:
+        if "relayMessage" not in msgJson and "configuration" not in msgJson:
             if "relayID" not in msgJson or "mqttID" not in msgJson or "mqttUsername" not in msgJson or "mqttPassword" not in msgJson:
                 doc = {}
                 doc["relayMessage"] = "Error, the given json does not contain one of the following keys: relayID, mqttID, mqttUsername, mqttPassword"
