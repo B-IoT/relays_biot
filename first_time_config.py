@@ -49,39 +49,41 @@ class FirstTimeConfig:
         self.mqttClient.publish(self.TOPIC_CONFIG, payload = json.dumps(doc), qos=1)
     
     def _handle_config_response(self, msgJson):
-        if "relayID" not in msgJson or "mqttID" not in msgJson or "mqttUsername" not in msgJson or "mqttPassword" not in msgJson:
-            doc = {}
-            doc["message"] = "Error, the given json does not contain one of the following keys: relayID, mqttID, mqttUsername, mqttPassword"
-            self.mqttClient.publish(self.TOPIC_CONFIG, payload = json.dumps(doc), qos=1)
-        else:
-            try:
-                f = open(self.CONFIG_PATH, 'w')
-                json.dump(msgJson, f)
-            except:
+        # Check that it is not one of our own message that is coming back
+        if "relayMessage" not in msgJson:
+            if "relayID" not in msgJson or "mqttID" not in msgJson or "mqttUsername" not in msgJson or "mqttPassword" not in msgJson:
                 doc = {}
-                doc["message"] = "An error occured while writing .config file"
+                doc["relayMessage"] = "Error, the given json does not contain one of the following keys: relayID, mqttID, mqttUsername, mqttPassword"
                 self.mqttClient.publish(self.TOPIC_CONFIG, payload = json.dumps(doc), qos=1)
-                return
-            finally:
-                f.close()
+            else:
+                try:
+                    f = open(self.CONFIG_PATH, 'w')
+                    json.dump(msgJson, f)
+                except:
+                    doc = {}
+                    doc["relayMessage"] = "An error occured while writing .config file"
+                    self.mqttClient.publish(self.TOPIC_CONFIG, payload = json.dumps(doc), qos=1)
+                    return
+                finally:
+                    f.close()
 
-            try:
-                f = open(self.CONFIG_PATH, 'r')
-                written_config = json.load(f)
-            except:
+                try:
+                    f = open(self.CONFIG_PATH, 'r')
+                    written_config = json.load(f)
+                except:
+                    doc = {}
+                    doc["relayMessage"] = "An error occured while reading .config file again"
+                    self.mqttClient.publish(self.TOPIC_CONFIG, payload = json.dumps(doc), qos=1)
+                    return
+                finally:
+                    f.close()
+                
                 doc = {}
-                doc["message"] = "An error occured while reading .config file again"
+                doc["relayMessage"] = "Written config"
+                doc["content"] = json.dumps(written_config)
+                doc["path"] = self.CONFIG_PATH
                 self.mqttClient.publish(self.TOPIC_CONFIG, payload = json.dumps(doc), qos=1)
-                return
-            finally:
-                f.close()
-            
-            doc = {}
-            doc["message"] = "Written config"
-            doc["content"] = json.dumps(written_config)
-            doc["path"] = self.CONFIG_PATH
-            self.mqttClient.publish(self.TOPIC_CONFIG, payload = json.dumps(doc), qos=1)
-            self.configured = True
+                self.configured = True
 
             
 
@@ -120,7 +122,7 @@ class FirstTimeConfig:
                 self.mqttClient.connect(self.MQTT_URL, port=self.MQTT_PORT, keepalive=60)
                 flag_error = False
             except:
-                print("Cannot conect, probably due to lack of network. Wait and retry...")
+                print("Cannot connect, probably due to lack of network. Wait and retry...")
                 flag_error = True
                 time.sleep(1)
         
