@@ -230,17 +230,25 @@ class Relay:
                             payload = t[2]
                             break
                     if payload != -1:
-                        if payload.startswith("6afe030902"):
-                            if len(payload) >= 24*2+1:
-                                buffer["battery"] = int(payload[24*2:24*2+2], 16)
-                                buffer["temperature"] = int(payload[28*2:28*2+2], 16)
-                                buffer["timeSinceLastMove"] = int(payload[16*2:16*2+2], 16)
-                            else:
-                                print("OLLLLLLEEEEEEE")
-                        elif payload.startswith("6afe02"):
-                            print("")
-                        elif payload.startswith("6afe03030d"):
-                            print("")
+                        if payload.startswith("6afe"):
+                            if payload[4:6] == "03":
+                                # telemetry packet
+                                # buffer["battery"] = int(payload[24*2:24*2+2], 16)
+                                # buffer["temperature"] = int(payload[28*2:28*2+2], 16)
+                                # buffer["timeSinceLastMove"] = int(payload[16*2:16*2+2], 16)
+                                print(payload)
+
+                        # if payload.startswith("6afe030902"):
+                        #     if len(payload) >= 24*2+1:
+                        #         buffer["battery"] = int(payload[24*2:24*2+2], 16)
+                        #         buffer["temperature"] = int(payload[28*2:28*2+2], 16)
+                        #         buffer["timeSinceLastMove"] = int(payload[16*2:16*2+2], 16)
+                        #     else:
+                        #         print("OLLLLLLEEEEEEE")
+                        # elif payload.startswith("6afe02"):
+                        #     print("")
+                        # elif payload.startswith("6afe03030d"):
+                        #     print("")
 
                         
 
