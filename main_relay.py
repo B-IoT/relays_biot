@@ -231,11 +231,16 @@ class Relay:
                             break
                     if payload != -1:
                         if payload.startswith("6afe030902"):
-                            print("OLLLLLLLEEEEEEEEE")
+                            if len(payload) >= 24*2+1:
+                                buffer["battery"] = int(payload[24*2:24*2+2], 16)
+                                buffer["temperature"] = int(payload[28*2:28*2+2], 16)
+                                buffer["timeSinceLastMove"] = int(payload[16*2:16*2+2], 16)
+                            else:
+                                print("OLLLLLLEEEEEEE")
                         elif payload.startswith("6afe02"):
-                            print("SHIT")
+                            print("")
                         elif payload.startswith("6afe03030d"):
-                            print("GOUPS")
+                            print("")
 
                         
 
