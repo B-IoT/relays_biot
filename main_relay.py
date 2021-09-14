@@ -241,7 +241,7 @@ class Relay:
                             # Packet Kontakt detection ID: 6AFE02
                             elif len(payload) >= 5 and payload[4:6] == "02":
                                 if len(payload) >= 15:
-                                    beacon["batteryLevel"] = int(payload[6*2:6*2+2], 16)
+                                    beacon["battery"] = int(payload[6*2:6*2+2], 16)
                                     beacon["txPower"] = int(payload[7*2:7*2+2], 16)
                             elif len(payload) >= 9 and payload[4:10] == "03030D":
                                 if len(payload) >= 11:
