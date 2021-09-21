@@ -128,7 +128,7 @@ class Relay:
     
     def _update_wifi_credentials(self, ssid, password, reset):
         print("Checking update of wifi credentials...")
-        escaped_password = {password.replace("$", "\$")}
+        escaped_password = {password.replace("$", "\\\$")}
         print("Password " + escaped_password)
         os.system(f"cat {self.WPA_SUPPLICANT_CONF_PATH}")
         if reset:
@@ -144,6 +144,7 @@ class Relay:
         if not present:
             print("Adding new network to wpa_supplicant.conf...")
             to_add = f"\nnetwork={{\n\tssid=\\\"\\\"{ssid}\\\"\\\"\n\tpsk=\\\"\\\"{escaped_password}\\\"\\\"\n}}"
+            print("To add " + to_add)
             os.system(f"echo \"{to_add}\" | sudo tee -a {self.WPA_SUPPLICANT_CONF_PATH}")
         
         if reset or not present:
