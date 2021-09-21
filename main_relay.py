@@ -143,7 +143,7 @@ class Relay:
                 present = True
         if not present:
             print("Adding new network to wpa_supplicant.conf...")
-            to_add = f"\nnetwork={{\n\tssid=\\\"\\\"{ssid}\\\"\\\"\n\tpsk=\\\"\\\"{escaped_password}\\\"\\\"\n}}"
+            to_add = f"\nnetwork={{\n\tssid=\\\"{ssid}\\\"\n\tpsk=\\\"{escaped_password}\\\"\n}}"
             print("To add " + to_add)
             os.system(f"echo \"{to_add}\" | sudo tee -a {self.WPA_SUPPLICANT_CONF_PATH}")
         
@@ -193,16 +193,17 @@ class Relay:
 
     
     async def loop(self):
-        while True:
-            print("Begin Scan")
-            self.scanner.scan(timeout=self.SCAN_TIMEOUT)
-            time_sec = int(time.time())
-            print(time_sec)
-            while time_sec % self.SENDING_INTERVAL_SECONDS != 0 :
-                time.sleep(0.01)
-                time_sec = int(time.time())
-            print("time = " + str(time_sec) + " number beacons = " + str(len(self.beacons)))
-            self._send_beacons_on_mqtt()
+        pass
+        # while True:
+        #     print("Begin Scan")
+        #     self.scanner.scan(timeout=self.SCAN_TIMEOUT)
+        #     time_sec = int(time.time())
+        #     print(time_sec)
+        #     while time_sec % self.SENDING_INTERVAL_SECONDS != 0 :
+        #         time.sleep(0.01)
+        #         time_sec = int(time.time())
+        #     print("time = " + str(time_sec) + " number beacons = " + str(len(self.beacons)))
+        #     self._send_beacons_on_mqtt()
 
     
     class ScanDelegate(DefaultDelegate):
