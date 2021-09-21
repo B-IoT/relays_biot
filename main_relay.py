@@ -128,7 +128,7 @@ class Relay:
     
     def _update_wifi_credentials(self, ssid, password, reset):
         print("Checking update of wifi credentials...")
-        escaped_password = password.replace("$", "$$")#password.replace("$", r"\\\$")
+        escaped_password = password.replace("$", r"\\$")
         print("Password " + escaped_password)
         os.system(f"cat {self.WPA_SUPPLICANT_CONF_PATH}")
         if reset:
