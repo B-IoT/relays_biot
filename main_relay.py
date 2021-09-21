@@ -80,7 +80,7 @@ class Relay:
         # Example message:
         #{"relayID":"relay_P1","beacons":[{"mac":"fc:02:a0:fa:33:19","rssi":-82,"battery":42,"temperature":24,"status":3}],"latitude":46.51746,"longitude":6.562729,"floor":0} from client relay_P1
 
-        # print("Sending beacons to backend...")
+        print("Sending beacons to backend...")
         for addr, b in self.beacons.items():
             beaconDoc = b.copy()
             beaconDoc.pop("timeSinceLastMove")
@@ -97,7 +97,7 @@ class Relay:
             self.mqttClient.publish(self.TOPIC_UPDATE, payload = json.dumps(doc), qos=1)
         
         self.beacons = {}
-        # print("Beacons sent to backend!")
+        print("Beacons sent to backend!")
     
     def _handle_management_msg(self, msgJson):
         if "reboot" in msgJson and msgJson["reboot"] == True:
@@ -165,7 +165,7 @@ class Relay:
     # The callback for when a PUBLISH message is received from the server.
     def on_message_mqtt(self, client, userdata, msg):
         print("topic= " + msg.topic+", message = "+str(msg.payload))
-        if(msg.topic == self.TOPIC_MANAGEMENT):
+        if msg.topic == self.TOPIC_MANAGEMENT:
             msgJson = json.loads(msg.payload.decode("utf-8"))
             self._handle_management_msg(msgJson)
     
@@ -194,14 +194,14 @@ class Relay:
     
     async def loop(self):
         while True:
-            # print("Begin Scan")
+            print("Begin Scan")
             self.scanner.scan(timeout=self.SCAN_TIMEOUT)
             time_sec = int(time.time())
-            # print(time_sec)
+            print(time_sec)
             while time_sec % self.SENDING_INTERVAL_SECONDS != 0 :
                 time.sleep(0.01)
                 time_sec = int(time.time())
-            # print("time = " + str(time_sec) + " number beacons = " + str(len(self.beacons)))
+            print("time = " + str(time_sec) + " number beacons = " + str(len(self.beacons)))
             self._send_beacons_on_mqtt()
 
     
@@ -254,12 +254,6 @@ class Relay:
                     self.parent.beacons[beacon["mac"]] = beacon
             # elif isNewData:
             #     print("Received new data from", dev.addr)
-
-
-    # Launch BLE loop
-    # event_loop = asyncio.get_event_loop()
-    # event_loop.run_until_complete(loop())
-    # event_loop.close()
 
 
 async def main():
