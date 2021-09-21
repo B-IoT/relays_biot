@@ -128,6 +128,7 @@ class Relay:
     
     def _update_wifi_credentials(self, ssid, password, reset):
         print("Checking update of wifi credentials...")
+        print("Password " + password)
         os.system(f"cat {self.WPA_SUPPLICANT_CONF_PATH}")
         if reset:
             print("Resetting wpa_supplicant.conf...")
