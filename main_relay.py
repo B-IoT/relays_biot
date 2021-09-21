@@ -4,10 +4,7 @@ import time
 import json
 from paho.mqtt.client import *
 from bluepy.btle import Scanner, DefaultDelegate
-import codecs
 import os
-
-from time import ctime
 
 
 # This class represent the main program of a relay
@@ -128,8 +125,7 @@ class Relay:
     
     def _update_wifi_credentials(self, ssid, password, reset):
         print("Checking update of wifi credentials...")
-        # hex_ssid = codecs.encode(ssid.encode(), "hex")
-        hex_password = codecs.encode(password.encode(), "hex").decode()
+        escaped_password = password.replace("$", "$$")
         os.system(f"cat {self.WPA_SUPPLICANT_CONF_PATH}")
         if reset:
             print("Resetting wpa_supplicant.conf...")
@@ -143,7 +139,7 @@ class Relay:
                     present = True
             if not present:
                 print("Adding new network to wpa_supplicant.conf...")
-                to_add = f"\nnetwork={{\n\tssid=\\\"{ssid}\\\"\n\tpsk={hex_password}\n}}"
+                to_add = f"\nnetwork={{\n\tssid=\\\"{ssid}\\\"\n\tpsk=\\\"{escaped_password}\\\"\n}}"
                 os.system(f"echo \"{to_add}\" | sudo tee -a {self.WPA_SUPPLICANT_CONF_PATH}")
             
             if reset or not present:
