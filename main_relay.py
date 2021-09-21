@@ -185,7 +185,7 @@ class Relay:
                 self.mqttClient.connect(self.MQTT_URL, port=self.MQTT_PORT, keepalive=60)
                 flag_error = False
             except:
-                print("Cannot conect, probably due to lack of network. Wait and retry...")
+                print("Cannot connect, probably due to lack of network. Wait and retry...")
                 flag_error = True
                 time.sleep(1)
         
@@ -193,16 +193,17 @@ class Relay:
 
     
     async def loop(self):
-        while True:
-            print("Begin Scan")
-            self.scanner.scan(timeout=self.SCAN_TIMEOUT)
-            time_sec = int(time.time())
-            print(time_sec)
-            while time_sec % self.SENDING_INTERVAL_SECONDS != 0 :
-                time.sleep(0.01)
-                time_sec = int(time.time())
-            print("time = " + str(time_sec) + " number beacons = " + str(len(self.beacons)))
-            self._send_beacons_on_mqtt()
+        pass
+        # while True:
+        #     print("Begin Scan")
+        #     self.scanner.scan(timeout=self.SCAN_TIMEOUT)
+        #     time_sec = int(time.time())
+        #     print(time_sec)
+        #     while time_sec % self.SENDING_INTERVAL_SECONDS != 0 :
+        #         time.sleep(0.01)
+        #         time_sec = int(time.time())
+        #     print("time = " + str(time_sec) + " number beacons = " + str(len(self.beacons)))
+        #     self._send_beacons_on_mqtt()
 
     
     class ScanDelegate(DefaultDelegate):
