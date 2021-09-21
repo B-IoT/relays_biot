@@ -80,7 +80,7 @@ class Relay:
         # Example message:
         #{"relayID":"relay_P1","beacons":[{"mac":"fc:02:a0:fa:33:19","rssi":-82,"battery":42,"temperature":24,"status":3}],"latitude":46.51746,"longitude":6.562729,"floor":0} from client relay_P1
 
-        print("Sending beacons to backend...")
+        # print("Sending beacons to backend...")
         for addr, b in self.beacons.items():
             beaconDoc = b.copy()
             beaconDoc.pop("timeSinceLastMove")
@@ -97,7 +97,7 @@ class Relay:
             self.mqttClient.publish(self.TOPIC_UPDATE, payload = json.dumps(doc), qos=1)
         
         self.beacons = {}
-        print("Beacons sent to backend!")
+        # print("Beacons sent to backend!")
     
     def _handle_management_msg(self, msgJson):
         if "reboot" in msgJson and msgJson["reboot"] == True:
@@ -128,7 +128,7 @@ class Relay:
     
     def _update_wifi_credentials(self, ssid, password, reset):
         print("Checking update of wifi credentials...")
-        escaped_password = {password.replace("$", "\\\$")}
+        escaped_password = password.replace("$", "\\\$")
         print("Password " + escaped_password)
         os.system(f"cat {self.WPA_SUPPLICANT_CONF_PATH}")
         if reset:
@@ -137,19 +137,19 @@ class Relay:
 
         # Check that the ssid is not already in the config
         present = False
-        wpa_conf = open(self.WPA_SUPPLICANT_CONF_PATH, 'r')
-        for l in wpa_conf:
-            if "ssid" in l and ssid in l:
-                present = True
-        if not present:
-            print("Adding new network to wpa_supplicant.conf...")
-            to_add = f"\nnetwork={{\n\tssid=\\\"{ssid}\\\"\n\tpsk=\\\"{escaped_password}\\\"\n}}"
-            print("To add " + to_add)
-            os.system(f"echo \"{to_add}\" | sudo tee -a {self.WPA_SUPPLICANT_CONF_PATH}")
-        
-        if reset or not present:
-            # Changes so reboot
-            os.system("sudo reboot")
+        with open(self.WPA_SUPPLICANT_CONF_PATH, 'r') as wpa_conf:
+            for l in wpa_conf:
+                if "ssid" in l and ssid in l:
+                    present = True
+            if not present:
+                print("Adding new network to wpa_supplicant.conf...")
+                to_add = f"\nnetwork={{\n\tssid=\\\"{ssid}\\\"\n\tpsk=\\\"{escaped_password}\\\"\n}}"
+                print("To add " + to_add)
+                os.system(f"echo \"{to_add}\" | sudo tee -a {self.WPA_SUPPLICANT_CONF_PATH}")
+            
+            if reset or not present:
+                # Changes so reboot
+                os.system("sudo reboot")
 
     # The callback for when the client receives a CONNACK response from the server.
     def on_connect_mqtt(self, client, userdata, flags, rc):
@@ -193,17 +193,16 @@ class Relay:
 
     
     async def loop(self):
-        pass
-        # while True:
-        #     print("Begin Scan")
-        #     self.scanner.scan(timeout=self.SCAN_TIMEOUT)
-        #     time_sec = int(time.time())
-        #     print(time_sec)
-        #     while time_sec % self.SENDING_INTERVAL_SECONDS != 0 :
-        #         time.sleep(0.01)
-        #         time_sec = int(time.time())
-        #     print("time = " + str(time_sec) + " number beacons = " + str(len(self.beacons)))
-        #     self._send_beacons_on_mqtt()
+        while True:
+            # print("Begin Scan")
+            self.scanner.scan(timeout=self.SCAN_TIMEOUT)
+            time_sec = int(time.time())
+            # print(time_sec)
+            while time_sec % self.SENDING_INTERVAL_SECONDS != 0 :
+                time.sleep(0.01)
+                time_sec = int(time.time())
+            # print("time = " + str(time_sec) + " number beacons = " + str(len(self.beacons)))
+            self._send_beacons_on_mqtt()
 
     
     class ScanDelegate(DefaultDelegate):
