@@ -143,7 +143,7 @@ class Relay:
                     present = True
             if not present:
                 print("Adding new network to wpa_supplicant.conf...")
-                to_add = f"\nnetwork={{\n\tssid=\\\"{hex_ssid}\\\"\n\tpsk=\\\"{hex_password}\\\"\n}}"
+                to_add = f"\nnetwork={{\n\tssid={hex_ssid}\n\tpsk={hex_password}\n}}"
                 os.system(f"echo \"{to_add}\" | sudo tee -a {self.WPA_SUPPLICANT_CONF_PATH}")
             
             if reset or not present:
