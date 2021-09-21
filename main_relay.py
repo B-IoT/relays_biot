@@ -164,7 +164,7 @@ class Relay:
 
     # The callback for when a PUBLISH message is received from the server.
     def on_message_mqtt(self, client, userdata, msg):
-        print("topic= " + msg.topic+", message = "+str(msg.payload))
+        print("topic= " + msg.topic + ", message = " + str(msg.payload))
         if msg.topic == self.TOPIC_MANAGEMENT:
             msgJson = json.loads(msg.payload.decode("utf-8"))
             self._handle_management_msg(msgJson)
@@ -193,17 +193,16 @@ class Relay:
 
     
     async def loop(self):
-        pass
-        # while True:
-        #     print("Begin Scan")
-        #     self.scanner.scan(timeout=self.SCAN_TIMEOUT)
-        #     time_sec = int(time.time())
-        #     print(time_sec)
-        #     while time_sec % self.SENDING_INTERVAL_SECONDS != 0 :
-        #         time.sleep(0.01)
-        #         time_sec = int(time.time())
-        #     print("time = " + str(time_sec) + " number beacons = " + str(len(self.beacons)))
-        #     self._send_beacons_on_mqtt()
+        while True:
+            print("Begin Scan")
+            self.scanner.scan(timeout=self.SCAN_TIMEOUT)
+            time_sec = int(time.time())
+            print(time_sec)
+            while time_sec % self.SENDING_INTERVAL_SECONDS != 0 :
+                time.sleep(0.01)
+                time_sec = int(time.time())
+            print("time = " + str(time_sec) + " number beacons = " + str(len(self.beacons)))
+            self._send_beacons_on_mqtt()
 
     
     class ScanDelegate(DefaultDelegate):
