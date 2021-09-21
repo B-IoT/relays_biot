@@ -9,6 +9,7 @@ while ! (ping -c 1 -W 1 1.2.3.4 | grep -q 'statistics'); do
     sleep 10
 done
 
+rm -f .git/index.lock
 git checkout -- .
 git pull
 
