@@ -6,9 +6,8 @@ cd $(dirname $0)
 pip3 install -r requirements.txt
 rm logs/main_relay.txt 
 
-# TO REMOVE!!! INSTALL HJU CERTIFICATE BEGIN
-sudo cp hju.pem /usr/local/share/ca-certificates
-sudo update-ca-certificates
-# TO REMOVE!!! INSTALL HJU CERTIFICATE END
+# TO REMOVE!!! CHANGE TO HTTPS ORIGIN BEGIN
+git remote set-url origin https://biot-relay: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@github.com/B-IoT/relays_biot.git
+# TO REMOVE!!! CHANGE TO HTTPS ORIGIN END
 
 sudo python3 main_relay.py #>> logs/main_relay.txt 2>&1 &
